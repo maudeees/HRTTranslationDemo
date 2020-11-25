@@ -1,6 +1,15 @@
 const LanguageTranslatorV3 = require('ibm-watson/language-translator/v3');
 const { IamAuthenticator } = require('ibm-watson/auth');
 
+const languageTranslator = new LanguageTranslatorV3({
+  version: '2018-05-01',
+  authenticator: new IamAuthenticator({
+    apikey: 'QBKUURIunMeqHfUpTesq2FDIqyKCqwrxWewkUUu5sqnV',
+  }),
+  serviceUrl: 'https://api.eu-de.language-translator.watson.cloud.ibm.com/instances/75d4748f-c31b-4fda-9b8b-90351f89bc96',
+});
+
+
 
 /**
  * Helper 
@@ -36,16 +45,6 @@ function main(params) {
   return new Promise(function (resolve, reject) {
 
     try {
-
-      //const LanguageTranslatorV3 = require('ibm-watson/language-translator/v3');
-      //const { IamAuthenticator } = require('ibm-watson/auth');
-      const LanguageTranslator = new LanguageTranslatorV3({
-        version: 'v1',
-        authenticator: new IamAuthenticator({
-          apikey: 'QBKUURIunMeqHfUpTesq2FDIqyKCqwrxWewkUUu5sqnV'
-        }),
-        serviceUrl: 'https://api.eu-de.language-translator.watson.cloud.ibm.com/instances/75d4748f-c31b-4fda-9b8b-90351f89bc96',
-      });
       
       // *******TODO**********
       // - Call the language identification API of the translation service
