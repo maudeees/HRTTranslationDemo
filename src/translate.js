@@ -1,5 +1,6 @@
 const LanguageTranslatorV3 = require('ibm-watson/language-translator/v3');
 const { IamAuthenticator } = require('ibm-watson/auth');
+//var _ = require("underscore");
 
 const languageTranslator = new LanguageTranslatorV3({
   version: '2018-05-01',
@@ -40,12 +41,12 @@ function main(params) {
    */
   const defaultLanguage = 'en';
 
-
+/*
   const translateParams = {
-    text: 'Hello, what the fuck i have to do here',
-    modelId: 'en-es',
+    text: "Let us do something here",
+    modelId: 'en-de',
   };
-
+*/
   
 
   
@@ -53,8 +54,7 @@ function main(params) {
   return new Promise(function (resolve, reject) {
 
     try {
-      let res;      
-
+      
       // *******TODO**********
       // - Call the language translation API of the translation service
       // see: https://cloud.ibm.com/apidocs/language-translator?code=node#translate
@@ -65,23 +65,44 @@ function main(params) {
 
       // in case of errors during the call resolve with an error message according to the pattern
       // found in the catch clause below
-
+      languageTranslator.listModels()
+        .then(translationModels => {
+            console.log(JSON.stringify(translationModels, null, 2));
+        })
+        .catch(err => {
+            console.log('error:', err);
+        });
+      
+      
+      const translationParams = {
+        text: params.body.text.text,
+        modelId: 'de-en',
+      };
+    /*  
+    const translationParams = {
+    text: "Let us do something here",
+    modelId: 'en-de',
+    };*/
+      //languageTranslator.listModels().then(translationModel => )
       // pick the language with the highest confidence, and send it back
-      resolve({
-        statusCode: 200,
-        body: {
-          translations: new String(JSON.stringify(languageTranslator.translate(translateParams)
+      languageTranslator.translate(translationParams)
           .then(translationResult => {
+            console.log(JSON.stringify(params, null,2));
             console.log(JSON.stringify(translationResult,null,2));
+            resolve({
+              statusCode: 200,
+              body: {
+                translations: translationResult.result.translations[0].translation,
+                words: translationResult.result.word_count,
+                characters: translationResult.result.character_count,
+              },
+              headers: { 'Content-Type': 'application/json' }
+            });
           })
           .catch(err => {
             console.log('error:',err);
-          }))),
-          words: 10,
-          characters: 11,
-        },
-        headers: { 'Content-Type': 'application/json' }
-      });
+            resolve(getTheErrorResponse('Error while communicating with the language service...', defaultLanguage));
+          });      
          
     } catch (err) {
       console.error('Error while initializing the AI service', err);
