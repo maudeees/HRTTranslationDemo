@@ -54,6 +54,7 @@ function main(params) {
 
     try {
       
+
       // *******TODO**********
       // - Call the language identification API of the translation service
       // see: https://cloud.ibm.com/apidocs/language-translator?code=node#identify-language
@@ -63,9 +64,16 @@ function main(params) {
 
       // in case of errors during the call resolve with an error message according to the pattern 
       // found in the catch clause below
-      languageTranslator.identify(params.text)
+      console.log(JSON.stringify(params, null,2));
+      /*
+      if (console.log("TEST2", JSON.stringify(params.text)) == "undefined") {
+        params = new {
+          text: "Das ist ein neuer Test"
+        }
+      }*/
+      languageTranslator.identify(params)
         .then(identifiedLanguages => {
-          console.log(JSON.stringify(params, null,2));
+          
           console.log(JSON.stringify(identifiedLanguages, null, 2));
           resolve({
             statusCode: 200,

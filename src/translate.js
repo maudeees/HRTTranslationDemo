@@ -67,22 +67,24 @@ function main(params) {
       // found in the catch clause below
       languageTranslator.listModels()
         .then(translationModels => {
-            console.log(JSON.stringify(translationModels, null, 2));
+            //console.log(JSON.stringify(translationModels, null, 2));
         })
         .catch(err => {
             console.log('error:', err);
         });
       
-      
+      var languageToTranslate = params.body.language+'-en';
+      if(languageToTranslate == 'en-en') {
+        languageToTranslate = 'en-de';
+      }
+      console.log("Test modelId", languageToTranslate);
+
+      console.log("TEST params", params);
       const translationParams = {
-        text: params.body.text.text,
-        modelId: 'de-en',
+        text: params.body.text,
+        modelId: languageToTranslate,
       };
-    /*  
-    const translationParams = {
-    text: "Let us do something here",
-    modelId: 'en-de',
-    };*/
+   
       //languageTranslator.listModels().then(translationModel => )
       // pick the language with the highest confidence, and send it back
       languageTranslator.translate(translationParams)
